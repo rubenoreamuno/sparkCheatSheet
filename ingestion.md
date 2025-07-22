@@ -26,3 +26,26 @@ spark.readStream.format("cloudFiles")
     .option("cloudFiles.allowOverwrites", "false")                    # Prevent reprocessing of overwritten files
     .option("cloudFiles.minBytesPerTrigger", "134217728")            # 128 MB; batch size based on file size
     .load("/mnt/pubsub_data/")
+```
+--
+```python
+from pyspark.sql.types import StructType, StringType
+
+schema = StructType() \
+    .add("event_id", StringType()) \
+    .add("event_type", StringType()) \
+    .add("payload", StringType()) \
+    .add("event_time", StringType())
+
+spark.readStream.format("cloudFiles") \
+    .schema(schema) \
+    .options({
+        "cloudFiles.format": "json",
+        "cloudFiles.useNotifications": "true",
+        "cloudFiles.schemaLocation": "/mnt/schema/pubsub/",
+        "cloudFiles.includeExistingFiles": "true",
+        "cloudFiles.maxFilesPerTrigger": "1000",
+        "cloudFiles.allowOverwrites": "false"
+    }) \
+    .load("/mnt/pubsub_data/")
+```
