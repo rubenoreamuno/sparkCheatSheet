@@ -27,7 +27,7 @@ spark.readStream.format("cloudFiles")
     .option("cloudFiles.minBytesPerTrigger", "134217728")            # 128 MB; batch size based on file size
     .load("/mnt/pubsub_data/")
 ```
---
+---
 ```python
 from pyspark.sql.types import StructType, StringType
 
