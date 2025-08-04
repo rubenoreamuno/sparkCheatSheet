@@ -2,7 +2,10 @@
 
 This pipeline uses Delta Live Tables (DLT) to ingest messages streamed from Google Pub/Sub, written to GCS, and processes them using the medallion architecture.
 
-## 🔧 Configuration
+For a more detailed, non-DLT example of streaming from Pub/Sub with Auto Loader, see the [Pub/Sub Connector Example](./pyspark_examples/connections/07_pubsub_connector.py).
+
+## 
+ Configuration
 
 - **Pipeline Mode**: Continuous
 - **Target Catalog**: `main`
@@ -11,7 +14,8 @@ This pipeline uses Delta Live Tables (DLT) to ingest messages streamed from Goog
 - **Format**: Newline-delimited JSON
 - **Streaming**: Enabled (Auto Loader)
 
-## 🧾 Code
+## 
+ Code
 
 ```python
 from pyspark.sql.functions import col, from_json, to_timestamp, window, count
@@ -64,3 +68,4 @@ def gold_summary():
           .agg(count("*").alias("events_per_hour"))
           .selectExpr("window.start as hour", "event_type", "events_per_hour")
     )
+```
